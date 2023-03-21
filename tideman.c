@@ -1,8 +1,10 @@
-#include <cs50.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
 
 // Max number of candidates
 #define MAX 9
+#define MAX_NAME_LEN 9
 
 // preferences[i][j] is number of voters who prefer i over j
 int preferences[MAX][MAX];
@@ -19,21 +21,21 @@ typedef struct
 pair;
 
 // Array of candidates
-string candidates[MAX];
+char candidates[MAX][MAX_NAME_LEN + 1];
 pair pairs[MAX * (MAX - 1) / 2];
 
 int pair_count;
 int candidate_count;
 
 // Function prototypes
-bool vote(int rank, string name, int ranks[]);
+bool vote(int rank, char* name, int ranks[]);
 void record_preferences(int ranks[]);
 void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
 
-int main(int argc, string argv[])
+int main(int argc, char* argv[])
 {
     // Check for invalid usage
     if (argc < 2)
@@ -51,7 +53,7 @@ int main(int argc, string argv[])
     }
     for (int i = 0; i < candidate_count; i++)
     {
-        candidates[i] = argv[i + 1];
+	strcpy(candidates[i], argv[i + 1]);
     }
 
     // Clear graph of locked in pairs
@@ -64,7 +66,9 @@ int main(int argc, string argv[])
     }
 
     pair_count = 0;
-    int voter_count = get_int("Number of voters: ");
+    printf("Number of voters: ");
+    int voter_count;
+    scanf("%i", &voter_count);
 
     // Query for votes
     for (int i = 0; i < voter_count; i++)
@@ -75,7 +79,9 @@ int main(int argc, string argv[])
         // Query for each rank
         for (int j = 0; j < candidate_count; j++)
         {
-            string name = get_string("Rank %i: ", j + 1);
+            printf("Rank %i: ", j + 1);
+	    char name[20];
+	    scanf("%s", name);
 
             if (!vote(j, name, ranks))
             {
@@ -97,7 +103,7 @@ int main(int argc, string argv[])
 }
 
 // Update ranks given a new vote
-bool vote(int rank, string name, int ranks[])
+bool vote(int rank, char* name, int ranks[])
 {
     // TODO
     return false;
