@@ -167,7 +167,38 @@ void add_pairs(void)
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    // TODO
+	bool sorted;
+	do
+	{
+		sorted = true;
+		for (int k = 0; k < pair_count - 1; k++)
+		{
+			int i_a, i_b, j_a, j_b, strength_a, strength_b;
+			//calculate strength of k-th pair
+			i_a = pairs[k].winner;
+			j_a = pairs[k].loser;
+			strength_a = preferences[i_a][j_a] - preferences[j_a][i_a];
+			//calculate strength of k+1-th pair
+			i_b = pairs[k+1].winner;
+			j_b = pairs[k+1].loser;
+			strength_b = preferences[i_b][j_b] - preferences[j_b][i_b];
+			//sort pairs in decreasing order
+			if (strength_a < strength_b)
+			{
+				//swap pairs
+				pair aux;
+				aux.winner = pairs[k].winner;
+				aux.loser = pairs[k].loser;
+				pairs[k].winner = pairs[k+1].winner;
+				pairs[k].loser = pairs[k+1].loser;
+				pairs[k+1].winner = aux.winner;
+				pairs[k+1].loser = aux.loser;
+				sorted = false;
+			}
+		}
+	}
+	while (!sorted);
+
     return;
 }
 
