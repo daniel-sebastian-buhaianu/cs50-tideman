@@ -174,18 +174,18 @@ void sort_pairs(void)
 		for (int k = 0; k < pair_count - 1; k++)
 		{
 			int i_a, i_b, j_a, j_b, strength_a, strength_b;
-			//calculate strength of k-th pair
+			// calculate strength of k-th pair
 			i_a = pairs[k].winner;
 			j_a = pairs[k].loser;
 			strength_a = preferences[i_a][j_a] - preferences[j_a][i_a];
-			//calculate strength of k+1-th pair
+			// calculate strength of k+1-th pair
 			i_b = pairs[k+1].winner;
 			j_b = pairs[k+1].loser;
 			strength_b = preferences[i_b][j_b] - preferences[j_b][i_b];
-			//sort pairs in decreasing order
+			// sort pairs in decreasing order
 			if (strength_a < strength_b)
 			{
-				//swap pairs
+				// swap pairs
 				pair aux;
 				aux.winner = pairs[k].winner;
 				aux.loser = pairs[k].loser;
@@ -205,7 +205,29 @@ void sort_pairs(void)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    // TODO
+	for (int i = 0; i < pair_count; i++)
+	{
+		// check if locking pair(x,y) will not create cycle
+		int sum = 0;
+		for (int col = 0; col < pair_count; col++)
+		{
+			if (col != pairs[i].loser)
+			{
+				for (int row = 0; row < pair_count; row++)
+				{
+					if (locked[row][col])
+					{
+						sum++;
+						break;
+					}
+				}
+			}
+		}
+		if (sum + 1 < pair_count)
+		{
+			locked[pairs[i].winner][pairs[i].loser] = true;
+		}
+	}
     return;
 }
 
