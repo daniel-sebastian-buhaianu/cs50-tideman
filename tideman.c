@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 
         record_preferences(ranks);
 
-        printf("\n");
+	printf("\n");
     }
 
     add_pairs();
@@ -109,7 +109,7 @@ bool vote(int rank, char* name, int ranks[])
 	{
 		if (strcmp(candidates[i], name) == 0)
 		{
-			ranks[i] = rank;
+			ranks[rank] = i;
 			return true;
 		}
 	}
@@ -125,8 +125,12 @@ void record_preferences(int ranks[])
 		{
 			// find index of i and j in ranks[]
 			int k = 0, index_i = -1, index_j = -1;
-			while (k < candidate_count && index_i + index_j < 0)
+			while (k < candidate_count)
 			{
+				if (index_i >= 0 && index_j >=0)
+				{
+					break;
+				}
 				if (ranks[k] == i)
 				{
 					index_i = k;
